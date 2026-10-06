@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NeuroAI — AI помощник</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#07070b;color:#f7f7fb}
+a{text-decoration:none;color:inherit}.nav{height:72px;display:flex;align-items:center;justify-content:space-between;max-width:1160px;margin:auto;padding:0 22px;border-bottom:1px solid #202027}
+.logo{font-size:22px;font-weight:800;letter-spacing:-.6px}.logo span{color:#8b5cf6}.navlinks{display:flex;gap:28px;color:#aaa}.btn{border:0;border-radius:12px;padding:12px 18px;font-weight:700;cursor:pointer}.primary{background:#8b5cf6;color:white;box-shadow:0 8px 30px #8b5cf633}.ghost{background:#15151c;color:#eee}
+.hero{max-width:1160px;margin:0 auto;padding:90px 22px 65px;text-align:center}.badge{display:inline-block;background:#14111f;border:1px solid #35255a;color:#c9b8ff;padding:8px 13px;border-radius:99px;font-size:13px}
+h1{font-size:clamp(45px,7vw,82px);line-height:.98;letter-spacing:-4px;margin:22px auto;max-width:900px}
+.gradient{background:linear-gradient(90deg,#fff,#a78bfa);-webkit-background-clip:text;color:transparent}.hero p{max-width:650px;margin:0 auto 28px;color:#a7a7b4;font-size:18px;line-height:1.6}
+.stats{display:flex;justify-content:center;gap:50px;color:#aaa;font-size:14px;margin-top:30px}.stats b{display:block;color:white;font-size:21px}
+.app{max-width:1050px;margin:20px auto 80px;padding:0 22px}.panel{background:#101016;border:1px solid #272730;border-radius:24px;padding:24px;box-shadow:0 25px 80px #0008}
+.paneltop{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.dot{width:9px;height:9px;background:#34d399;border-radius:50%;display:inline-block;margin-right:7px}
+textarea{width:100%;min-height:135px;background:#09090d;color:#eee;border:1px solid #292933;border-radius:16px;padding:17px;font-size:16px;resize:vertical;outline:none}textarea:focus{border-color:#7650d7}
+.tools{display:flex;justify-content:space-between;align-items:center;margin-top:14px;gap:12px}.result{display:none;margin-top:18px;padding:20px;background:#09090d;border:1px solid #292933;border-radius:16px;line-height:1.65;color:#ddd;white-space:pre-wrap}
+.section{max-width:1160px;margin:0 auto;padding:70px 22px}.section h2{text-align:center;font-size:40px;margin:0 0 12px;letter-spacing:-1.5px}.sub{text-align:center;color:#999;margin-bottom:38px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{background:#101016;border:1px solid #25252d;border-radius:20px;padding:25px}.icon{font-size:28px}.card h3{margin:16px 0 8px}.card p{color:#999;line-height:1.5}
+.pricing{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.price{background:#101016;border:1px solid #292933;border-radius:20px;padding:26px}.price.featured{border-color:#8b5cf6;box-shadow:0 0 35px #8b5cf622}.price h3{margin-top:0}.amount{font-size:40px;font-weight:800;margin:18px 0}.amount small{font-size:14px;color:#999;font-weight:400}.price ul{padding-left:20px;color:#aaa;line-height:2}
+footer{border-top:1px solid #202027;text-align:center;color:#777;padding:30px 20px;margin-top:40px}
+.toast{position:fixed;right:20px;bottom:20px;background:#18181f;border:1px solid #333;border-radius:12px;padding:14px 18px;display:none}
+@media(max-width:760px){.navlinks{display:none}.hero{padding-top:60px}h1{letter-spacing:-2.5px}.stats{gap:20px}.cards,.pricing{grid-template-columns:1fr}.tools{align-items:stretch;flex-direction:column}.tools button{width:100%}}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="logo">Neuro<span>AI</span></div>
+  <div class="navlinks"><a href="#ai">AI</a><a href="#features">Возможности</a><a href="#pricing">Тарифы</a></div>
+  <button class="btn primary" onclick="document.getElementById('ai').scrollIntoView({behavior:'smooth'})">Попробовать</button>
+</nav>
+
+<header class="hero">
+  <div class="badge">✦ AI нового поколения</div>
+  <h1>Твои идеи.<br><span class="gradient">Возможности AI.</span></h1>
+  <p>NeuroAI помогает писать тексты, придумывать идеи, учиться и решать повседневные задачи за считанные секунды.</p>
+  <button class="btn primary" onclick="document.getElementById('ai').scrollIntoView({behavior:'smooth'})">Начать бесплатно →</button>
+  <div class="stats"><div><b>10K+</b>пользователей</div><div><b>99.9%</b>доступность</div><div><b>24/7</b>AI-помощник</div></div>
+</header>
+
+<section class="app" id="ai">
+ <div class="panel">
+  <div class="paneltop"><strong>🤖 NeuroAI</strong><span style="color:#aaa;font-size:13px"><i class="dot"></i>Готов к работе</span></div>
+  <textarea id="prompt" placeholder="Напиши, что нужно сделать… Например: «Придумай 5 идей для TikTok про спорт»"></textarea>
+  <div class="tools"><span style="color:#777;font-size:13px" id="counter">Бесплатный лимит: 5 запросов</span><button class="btn primary" onclick="generate()">Сгенерировать ✨</button></div>
+  <div class="result" id="result"></div>
+ </div>
+</section>
+
+<section class="section" id="features">
+ <h2>Один AI — много возможностей</h2><p class="sub">Сделай больше за меньшее время.</p>
+ <div class="cards">
+  <div class="card"><div class="icon">✍️</div><h3>Тексты</h3><p>Посты, описания, письма, идеи и другой контент.</p></div>
+  <div class="card"><div class="icon">💡</div><h3>Идеи</h3><p>Генерируй идеи для проектов, контента и бизнеса.</p></div>
+  <div class="card"><div class="icon">📚</div><h3>Учёба</h3><p>Объяснения сложных тем простым языком.</p></div>
+ </div>
+</section>
+
+<section class="section" id="pricing">
+ <h2>Простые тарифы</h2><p class="sub">Начни бесплатно и переходи на Pro, когда понадобится больше.</p>
+ <div class="pricing">
+  <div class="price"><h3>Free</h3><div class="amount">$0 <small>/ месяц</small></div><ul><li>5 запросов в день</li><li>Базовый AI</li><li>Без карты</li></ul><button class="btn ghost" style="width:100%">Текущий план</button></div>
+  <div class="price featured"><h3>Pro ⚡</h3><div class="amount">$9 <small>/ месяц</small></div><ul><li>Неограниченные запросы*</li><li>Более мощные модели</li><li>Приоритетная скорость</li></ul><button class="btn primary" style="width:100%" onclick="showToast('Оплата подключается через Stripe')">Выбрать Pro</button></div>
+  <div class="price"><h3>Business</h3><div class="amount">$29 <small>/ месяц</small></div><ul><li>Командный доступ</li><li>Высокие лимиты</li><li>API-доступ</li></ul><button class="btn ghost" style="width:100%" onclick="showToast('Свяжитесь с нами для Business')">Подробнее</button></div>
+ </div>
+</section>
+
+<footer>© 2026 NeuroAI · AI-платформа</footer>
+<div class="toast" id="toast"></div>
+<script>
+let left=5;
+function generate(){
+ const p=document.getElementById('prompt').value.trim(), r=document.getElementById('result');
+ if(!p){showToast('Сначала напиши запрос');return}
+ if(left<=0){showToast('Лимит закончился — это место для подключения Pro');return}
+ left--;
+ document.getElementById('counter').textContent=`Осталось бесплатных запросов: ${left}`;
+ r.style.display='block';
+ r.textContent='Генерирую ответ…';
+ setTimeout(()=>{
+   r.textContent=`Демо-ответ NeuroAI на запрос:\\n\\n«${p}»\\n\\nЭто демонстрационная версия интерфейса. Для настоящих ответов AI сюда подключается серверный API (например, через безопасный backend), а для подписок — платёжная система.`;
+ },500);
+}
+function showToast(t){const x=document.getElementById('toast');x.textContent=t;x.style.display='block';setTimeout(()=>x.style.display='none',2500)}
+</script>
+</body>
+</html>
